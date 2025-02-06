@@ -30,7 +30,7 @@
       <input type="file" id="image" name="image" accept="image/*" (change)="onFileSelected($event)">
     </div>
     
-    <!-- Mostrar vista previa de la imagen seleccionada -->
+    <!-- Vista previa de la imagen seleccionada -->
     <img *ngIf="newRecommendation.img" [src]="newRecommendation.img" alt="Preview" class="image-preview">
   </div>
   <button nz-button [nzType]="'primary'" class="save-btn" (click)="createRecommendation()">SAVE</button>
@@ -54,7 +54,6 @@
     <tbody>
       <tr *ngFor="let data of filteredData">
         <td>{{ data.title }}</td>
-        <!-- Aquí ya se usa la URL completa de la imagen -->
         <td><img *ngIf="data.img" [src]="data.img" alt="Image" class="image-display"></td>
         <td>{{ data.description }}</td>
         <td>
@@ -65,4 +64,4 @@
       </tr>
     </tbody>
   </table>
-  
+</div>

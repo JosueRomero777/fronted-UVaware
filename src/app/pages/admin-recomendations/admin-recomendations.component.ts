@@ -33,100 +33,96 @@ interface Recommendation {
   styleUrl: './admin-recomendations.component.css',
 })
 export class AdminRecomendationsComponent {
-  filteredData: any[] = [];
-  constructor(private router: Router, private http: HttpClient) {}
-
+  filteredData: Recommendation[] = [];
   searchValue = '';
   listOfData: Recommendation[] = [];
-  newRecommendation: Partial<Recommendation> = {};
+  newRecommendation: Partial<Recommendation> = { title: '', description: '', img: '' };
+  selectedFile: File | null = null; // Guardar el archivo seleccionado
+
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     this.fetchRecommendations();
   }
-  
-  fetchRecommendations() {
-    this.http.get<Recommendation[]>('http://localhost:3000/recomendations').subscribe(
-      (data) => {
-        this.listOfData = data;
-        console.log('List of data:', this.listOfData); // Verifica la estructura de los datos
-      }
-    );
-  }
-  
 
-  createRecommendation() {
+  fetchRecommendations() {
+    this.http.get<Recommendation[]>('http://localhost:3000/recomendations').subscribe((data) => {
+      this.listOfData = data;
+      this.filteredData = [...this.listOfData];
+      console.log('List of recommendations:', this.listOfData);
+    });
+  }
+
+  // ✅ Selección de archivo y vista previa
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.newRecommendation.img = e.target.result; // Mostrar vista previa
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+
+  // ✅ Enviar imagen y datos de recomendación en un solo request
+createRecommendation() {
+  if (!this.selectedFile) {
+    alert('Please select an image.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', this.selectedFile);
+  formData.append('title', this.newRecommendation.title || '');
+  formData.append('description', this.newRecommendation.description || '');
+
+  this.http.post<Recommendation>('http://localhost:3000/recomendations', formData).subscribe({
+    next: (response) => {
+      this.fetchRecommendations();
+      this.newRecommendation = { title: '', description: '', img: '' };
+      this.selectedFile = null;
+    },
+    error: (error) => {
+      console.error('Error creating recommendation:', error);
+    },
+  });
+}
+
+
+  // ✅ Guardar la recomendación después de subir la imagen
+  saveRecommendation() {
     this.http.post<Recommendation>('http://localhost:3000/recomendations', this.newRecommendation).subscribe(() => {
       this.fetchRecommendations();
-      this.newRecommendation = {};
+      this.newRecommendation = { title: '', description: '', img: '' };
+      this.selectedFile = null;
     });
   }
 
   deleteRecommendation(id: number) {
-    this.http.delete(`http://localhost:3000/recomendations/${id}`).subscribe(() =>
-      this.fetchRecommendations()
-    );
+    this.http.delete(`http://localhost:3000/recomendations/${id}`).subscribe(() => this.fetchRecommendations());
   }
 
   filterData() {
-    if (!this.searchValue) {
-      this.filteredData = [...this.listOfData];  // Si no hay búsqueda, muestra todos los datos
-    } else {
-      this.filteredData = this.listOfData.filter(item =>
-        item.title.toLowerCase().includes(this.searchValue.toLowerCase())
-      );
-    }
-  
-    // Agregar un log para verificar las URLs de las imágenes
-    console.log('Filtered Data:', this.filteredData);
-  }
-  
-  
-  
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('image', file); // Se asegura de que el archivo se envíe correctamente
-      
-      this.http.post<{ imgUrl: string }>('http://localhost:3000/recomendations/upload', formData).subscribe({
-        next: (response) => {
-          // Aquí agregamos la URL completa a `newRecommendation.img`
-          this.newRecommendation.img = `http://localhost:3000${response.imgUrl}`;
-        },
-        error: (error) => {
-          console.error('Error uploading image:', error);
-        },
-        complete: () => {
-          console.log('Upload completed');
-        }
-      });
-    }
+    this.filteredData = this.searchValue
+      ? this.listOfData.filter((item) => item.title.toLowerCase().includes(this.searchValue.toLowerCase()))
+      : [...this.listOfData];
   }
 
-  
-  
-
-  
-  
   logout() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-      document.cookie = 'PHPSESSID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = 'usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = 'admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    }
+    localStorage.removeItem('token');
+    document.cookie = 'PHPSESSID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     this.invalidateSession();
   }
 
   invalidateSession() {
-    this.http.post('http://localhost:3000/auth/logout', {}, { withCredentials: true }).subscribe({
-      next: () => {
-        console.log('Logout successful');
-        this.router.navigate(['/admin']);
-      },
-      error: (err) => {
-        console.error('Logout failed', err);
-      },
+    this.http.post('http://localhost:3000/auth/logout', {}, { withCredentials: true }).subscribe(() => {
+      console.log('Logout successful');
+      this.router.navigate(['/admin']);
     });
   }
 }
