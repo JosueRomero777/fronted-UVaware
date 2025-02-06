@@ -1,0 +1,53 @@
+<div class="login-container">
+  <div class="login-left">
+    <img src="icons/logo-uvaware.png" alt="UV Aware Logo" class="logo-small" />
+    <h1 class="login-title">UV Aware</h1>
+    <img src="icons/icono-login.png" alt="Login Illustration" class="illustration" />
+    <p class="login-subtitle">Development Panel For Administrators</p>
+  </div>
+  <div class="login-right">
+    <h2 class="welcome-title">Welcome back to the UV Aware</h2>
+    <div class="login-buttons">
+      <button class="social-button">
+        <img src="icons/logo-google.svg" alt="Google Logo" />
+        Log In with Google
+      </button>
+      <button class="social-button">
+        <img src="icons/logo-github.svg" alt="GitHub Logo" />
+        Log In with GitHub
+      </button>
+    </div>
+    <form (ngSubmit)="onSubmit()">
+      <input
+        type="text"
+        placeholder="Email or Use"
+        [(ngModel)]="email"
+        name="email"
+        class="login-input"
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        class="login-input"
+        required
+        id="password"
+      />
+      
+      <!-- Checkbox para mostrar la contraseña -->
+      <div class="login-show-password">
+        <input
+          type="checkbox"
+          id="showPassword"
+          (change)="togglePasswordVisibility()"
+        />
+        <label for="showPassword">Show Password</label>
+      </div>
+
+      <button type="submit" class="login-button">LOG IN</button>
+    </form>
+    <p *ngIf="error" style="color: red;">{{ error }}</p>
+  </div>
+</div>

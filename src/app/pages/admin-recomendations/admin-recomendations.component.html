@@ -1,0 +1,68 @@
+<div class="header">
+  <img src="icons/logo-uvaware.png" alt="UV Aware Logo" class="logo">
+  <span class="logo-text">UV Aware</span>
+  <div class="menu">
+    <span>Articles <img src="icons/icon-viñeta.png" alt="Menu" /></span>
+    <span>Statistics <img src="icons/icon-viñeta.png" alt="Menu" /></span>
+  </div>
+  <img src="icons/icon-logout.png" (click)="logout()" alt="Logout" class="logout">
+</div>
+
+<div class="container">
+  <h2 class="title">CREAR RECOMENDACION</h2>
+  <div class="form-container">
+    <div class="form-group">
+      <label>TITLE:</label>
+      <input nz-input [(ngModel)]="newRecommendation.title" placeholder="example" />
+    </div>
+    <div class="form-group">
+      <label>DESCRIPTION:</label>
+      <input nz-input [(ngModel)]="newRecommendation.description" placeholder="example" />
+    </div>
+
+    <div class="form-group">
+      <label>IMG URL:</label>
+      <input nz-input [(ngModel)]="newRecommendation.img" placeholder="Image URL" readonly />
+    </div>
+    
+    <div class="form-group">
+      <label for="image">UPLOAD IMAGE:</label>
+      <input type="file" id="image" name="image" accept="image/*" (change)="onFileSelected($event)">
+    </div>
+    
+    <!-- Mostrar vista previa de la imagen seleccionada -->
+    <img *ngIf="newRecommendation.img" [src]="newRecommendation.img" alt="Preview" class="image-preview">
+  </div>
+  <button nz-button [nzType]="'primary'" class="save-btn" (click)="createRecommendation()">SAVE</button>
+
+  <div class="search-container">
+    <h3 class="search-title">SEARCH:</h3>
+    <nz-input-group [nzPrefix]="'search'">
+      <input type="text" nz-input [(ngModel)]="searchValue" (ngModelChange)="filterData()" placeholder="example" />
+    </nz-input-group>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of filteredData">
+        <td>{{ data.title }}</td>
+        <!-- Aquí ya se usa la URL completa de la imagen -->
+        <td><img *ngIf="data.img" [src]="data.img" alt="Image" class="image-display"></td>
+        <td>{{ data.description }}</td>
+        <td>
+          <button nz-button nzType="text" (click)="deleteRecommendation(data.idrecomendations)">
+            <img src="icons/icon-delete.svg" alt="Delete">
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
