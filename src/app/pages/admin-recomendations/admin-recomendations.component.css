@@ -1,79 +1,171 @@
-/* recommendation.component.css */
 .container {
-    background-color: #E6F4F6;
-    padding: 20px;
-  }
-  .header {
-    display: flex;
-    align-items: center;
-    background-color: #008CA8;
-    padding: 10px;
-    justify-content: space-between;
-  }
-  .logo-container {
-    display: flex;
-    align-items: center;
-  }
-  .logo {
-    height: 50px;
-  }
-  .logo-text {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 10px;
-  }
-  .menu {
-    display: flex;
-    gap: 20px;
-  }
-  .menu span {
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .logout {
-    height: 30px;
-  }
-  .title, .search-title, label {
-    color: #008CA8;
-  }
-  .form-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-  .save-btn {
-    background-color: #E59452;
-    color: white;
-    margin-top: 10px;
-  }
-  .search-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th {
-    background-color: #008CA8;
-    color: white;
-    padding: 10px;
-  }
-  td {
-    border: 1px solid #008CA8;
-    padding: 10px;
-    background-color: #E6F4F6;
-  }
-  img {
-    height: 30px;
-  }
-  
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #008CA8;
+  padding: 10px 20px;
+  justify-content: space-between;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.logo-text {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+}
+
+.menu span {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout {
+  height: 30px;
+}
+
+.title,
+.search-title,
+label {
+  color: #008CA8;
+}
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background-color: #E59452;
+  color: white;
+  margin-top: 10px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+  background-color: #d07c40;
+}
+
+.cancel-btn {
+  background-color: #D3D3D3;
+  color: #333;
+  margin-left: 10px;
+  margin-top: 10px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #BEBEBE;
+  color: black;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  padding-top: 3rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th {
+  background-color: #008CA8;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+td {
+  border: 1px solid #008CA8;
+  padding: 10px;
+  background-color: #E6F4F6;
+  text-align: center;
+}
+
+td img {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ✅ Se corrigió la imagen de previsualización */
+.image-preview {
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 10px auto;
+  border: 1px solid #008CA8;
+}
+
+/* ✅ Se eliminó el fondo de los botones en .actions-column */
+.actions-column {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 3rem;
+  background: none !important; /* 🔥 Evita que el fondo afecte los iconos */
+  border: none !important;
+}
+
+.actions-column img {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+  background: transparent !important; /* 🔥 Evita cualquier fondo */
+  border: none !important;
+  padding: 0;
+}
+
+.actions-column img:hover {
+  transform: scale(1.1);
+}

@@ -1,55 +1,79 @@
 <nz-layout class="app-layout">
-    <nz-sider class="menu-sidebar"
-      nzCollapsible
-      nzWidth="256px"
-      nzBreakpoint="md"
-      [(nzCollapsed)]="isCollapsed"
-      [nzTrigger]="null">
-      <div class="sidebar-logo">
-        <a href="https://ng.ant.design/" target="_blank">
-          <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-          <h1>Ant Design Of Angular</h1>
-        </a>
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a href="/" target="_blank">
+        <img src="icons/logo-uvaware.png" alt="logo">
+        <h1>UVaware</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/welcome">Recommendations</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a>Articles</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span
+            class="trigger"
+            nz-icon
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          ></span>
+        </span>
       </div>
-      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-        <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
-          <ul>
-            <li nz-menu-item nzMatchRouter>
-              <a routerLink="/welcome">Welcome</a>
-            </li>
-            <li nz-menu-item nzMatchRouter>
-              <a>Monitor</a>
-            </li>
-            <li nz-menu-item nzMatchRouter>
-              <a>Workplace</a>
-            </li>
-          </ul>
-        </li>
-        <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-          <ul>
-            <li nz-menu-item nzMatchRouter>
-              <a>Basic Form</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </nz-sider>
-    <nz-layout>
-      <nz-header>
-        <div class="app-header">
-          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-              <span class="trigger"
-                 nz-icon
-                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-              ></span>
-          </span>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <!-- Grid de recomendaciones -->
+        <div class="recommendations-grid">
+          <div
+            *ngFor="let recommendation of recommendations"
+            class="recommendation-card"
+            (click)="viewRecommendation(recommendation)"
+          >
+            <img [src]="recommendation.img" alt="{{ recommendation.title }}" class="card-image" />
+            <h3 class="card-title">{{ recommendation.title }}</h3>
+            <p class="card-description">
+              {{ recommendation.description | slice:0:100 }}...
+            </p>
+          </div>
         </div>
-      </nz-header>
-      <nz-content>
-        <div class="inner-content">
-          <router-outlet></router-outlet>
-        </div>
-      </nz-content>
-    </nz-layout>
+      </div>
+    </nz-content>
   </nz-layout>
-  
+</nz-layout>
+
+<!-- Modal Pantalla Completa -->
+<div class="modal fade" id="recommendationModal" tabindex="-1" aria-labelledby="recommendationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="recommendationModalLabel">{{ selectedRecommendation?.title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center d-flex flex-column align-items-center justify-content-center">
+        <img [src]="selectedRecommendation?.img" class="modal-image img-fluid" alt="{{ selectedRecommendation?.title }}">
+        <p class="modal-description mt-3 text-white">{{ selectedRecommendation?.description }}</p>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
